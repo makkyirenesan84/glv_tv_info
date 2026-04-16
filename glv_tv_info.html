@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GRAND LA VOGUE - Guest Information</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Josefin+Sans:wght@100;300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0a1628;
+    --navy-mid: #12214a;
+    --navy-light: #1a2f5e;
+    --gold: #c9a84c;
+    --gold-light: #e8c97a;
+    --gold-pale: #f5e8c0;
+    --white: #ffffff;
+    --off-white: #f9f5ee;
+    --text-light: rgba(255,255,255,0.75);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    width: 100%; height: 100%;
+    background: var(--navy);
+    color: var(--white);
+    font-family: 'Times New Roman', Times, serif;
+    overflow: hidden;
+  }
+
+  /* ===== SCREEN CONTAINER ===== */
+  .screen {
+    width: 100vw; height: 100vh;
+    display: none;
+    flex-direction: column;
+    animation: fadeIn 0.8s ease;
+  }
+  .screen.active { display: flex; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ===== HEADER ===== */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 48px;
+    border-bottom: 1px solid rgba(201,168,76,0.3);
+    background: linear-gradient(180deg, rgba(10,22,40,0.95) 0%, transparent 100%);
+    flex-shrink: 0;
+  }
+
+  .logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    font-weight: 300;
+    letter-spacing: 0.35em;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+  .logo span {
+    display: block;
+    font-size: 0.55rem;
+    letter-spacing: 0.5em;
+    color: var(--text-light);
+    margin-top: 2px;
+  }
+
+  .clock {
+    font-size: 2rem;
+    font-weight: 100;
+    letter-spacing: 0.15em;
+    color: var(--gold-light);
+  }
+  .date-display {
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    color: var(--text-light);
+    text-align: right;
+    margin-top: 2px;
+  }
+
+  /* ===== NAV TABS ===== */
+  .nav {
+    display: flex;
+    gap: 0;
+    padding: 0 48px;
+    background: rgba(18,33,74,0.6);
+    border-bottom: 1px solid rgba(201,168,76,0.15);
+    flex-shrink: 0;
+  }
+
+  .nav-btn {
+    padding: 14px 28px;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--text-light);
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 0.65rem;
+    font-weight: 300;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  .nav-btn:hover { color: var(--gold-light); }
+  .nav-btn.active {
+    color: var(--gold);
+    border-bottom-color: var(--gold);
+  }
+
+  /* ===== PROGRESS BAR ===== */
+  .progress-bar-wrap {
+    height: 2px;
+    background: rgba(201,168,76,0.1);
+    flex-shrink: 0;
+  }
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold), var(--gold-light));
+    width: 0%;
+    transition: none;
+  }
+  .progress-bar.animating {
+    transition: width 15s linear;
+    width: 100%;
+  }
+
+  /* ===== CONTENT AREA ===== */
+  .content {
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* ===== HOME SCREEN ===== */
+  #home {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .home-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+  }
+
+  .home-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background:
+      linear-gradient(90deg, rgba(10,22,40,0.92) 0%, rgba(10,22,40,0.75) 35%, rgba(10,22,40,0.35) 70%, rgba(10,22,40,0.15) 100%),
+      radial-gradient(ellipse at 20% 50%, rgba(201,168,76,0.08) 0%, transparent 60%);
+  }
+
+  .home-deco {
+    position: absolute;
+    top: 50%;
+    right: 6%;
+    transform: translateY(-50%);
+    z-index: 2;
+    width: 560px;
+    height: 560px;
+    border: 1px solid rgba(201,168,76,0.15);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .home-deco::before {
+    content: '';
+    position: absolute;
+    width: 460px; height: 460px;
+    border: 1px solid rgba(201,168,76,0.1);
+    border-radius: 50%;
+  }
+  .home-logo-img {
+    width: 440px;
+    height: 440px;
+    object-fit: contain;
+    position: relative;
+    z-index: 1;
+  }
+
+  .home-text {
+    position: relative;
+    z-index: 2;
+    padding: 0 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+  }
+
+  .welcome-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.5em;
+    color: var(--gold);
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+
+  .welcome-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3.2rem;
+    font-weight: 300;
+    line-height: 1.15;
+    margin-bottom: 20px;
+  }
+  .welcome-title em {
+    font-style: italic;
+    color: var(--gold-light);
+  }
+
+  .welcome-sub {
+    font-size: 0.7rem;
+    font-weight: 300;
+    letter-spacing: 0.2em;
+    color: var(--text-light);
+    max-width: 380px;
+    line-height: 2;
+    margin-bottom: 36px;
+  }
+
+  .quick-info {
+    display: flex;
+    gap: 32px;
+  }
+
+  .quick-card {
+    background: rgba(201,168,76,0.07);
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 4px;
+    padding: 16px 22px;
+    min-width: 140px;
+  }
+  .quick-card-label {
+    font-size: 0.5rem;
+    letter-spacing: 0.4em;
+    color: var(--gold);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+  .quick-card-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    font-weight: 300;
+    letter-spacing: 0.05em;
+  }
+
+  /* ===== ROOMS SCREEN ===== */
+  #rooms .content-inner {
+    height: 100%;
+    overflow-y: auto;
+    padding: 28px 48px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(201,168,76,0.3) transparent;
+  }
+
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.65rem;
+    font-weight: 400;
+    letter-spacing: 0.5em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .section-heading {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 300;
+    margin-bottom: 24px;
+  }
+
+  .room-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .room-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(201,168,76,0.15);
+    border-radius: 4px;
+    padding: 20px;
+    transition: border-color 0.3s;
+  }
+  .room-card:hover { border-color: rgba(201,168,76,0.4); }
+
+  .room-type {
+    font-size: 0.5rem;
+    letter-spacing: 0.4em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .room-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem;
+    font-weight: 300;
+    margin-bottom: 10px;
+  }
+  .room-name-ja {
+    font-size: 0.65rem;
+    color: var(--text-light);
+    margin-bottom: 12px;
+    letter-spacing: 0.1em;
+  }
+  .room-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .room-tag {
+    font-size: 0.55rem;
+    letter-spacing: 0.2em;
+    color: var(--text-light);
+    background: rgba(201,168,76,0.08);
+    border: 1px solid rgba(201,168,76,0.1);
+    padding: 3px 10px;
+    border-radius: 2px;
+  }
+  .room-floor {
+    font-size: 0.55rem;
+    letter-spacing: 0.15em;
+    color: var(--text-light);
+    margin-top: 10px;
+  }
+
+  /* ===== RESTAURANT SCREEN ===== */
+  #restaurant .content-inner {
+    height: 100%;
+    overflow-y: auto;
+    padding: 28px 48px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(201,168,76,0.3) transparent;
+  }
+
+  .rest-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  .rest-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(201,168,76,0.15);
+    border-radius: 4px;
+    padding: 22px 24px;
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    transition: border-color 0.3s;
+  }
+  .rest-card:hover { border-color: rgba(201,168,76,0.35); }
+
+  .rest-floor-badge {
+    background: rgba(201,168,76,0.12);
+    border: 1px solid rgba(201,168,76,0.25);
+    border-radius: 3px;
+    padding: 8px 12px;
+    text-align: center;
+    flex-shrink: 0;
+    min-width: 52px;
+  }
+  .rest-floor-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-weight: 300;
+    color: var(--gold-light);
+    display: block;
+  }
+  .rest-floor-label {
+    font-size: 0.45rem;
+    letter-spacing: 0.3em;
+    color: var(--text-light);
+    text-transform: uppercase;
+  }
+
+  .rest-info { flex: 1; }
+  .rest-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.15rem;
+    font-weight: 300;
+    margin-bottom: 3px;
+  }
+  .rest-name-ja {
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+  .rest-desc {
+    font-size: 0.6rem;
+    font-weight: 300;
+    line-height: 1.8;
+    color: var(--text-light);
+    margin-bottom: 10px;
+  }
+  .rest-hours {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.55rem;
+    letter-spacing: 0.1em;
+    color: var(--text-light);
+  }
+  .rest-hours-dot {
+    width: 4px; height: 4px;
+    background: var(--gold);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .rest-tel {
+    font-size: 0.55rem;
+    letter-spacing: 0.1em;
+    color: var(--text-light);
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* ===== CASINO SCREEN ===== */
+  #casino .content-inner {
+    height: 100%;
+    overflow-y: auto;
+    padding: 28px 48px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(201,168,76,0.3) transparent;
+  }
+
+  .casino-hero {
+    display: grid;
+    grid-template-columns: 1fr 1fr 0.8fr;
+    gap: 24px;
+    align-items: center;
+    background: linear-gradient(135deg, rgba(201,168,76,0.12) 0%, rgba(201,168,76,0.03) 100%);
+    border: 1px solid rgba(201,168,76,0.25);
+    border-radius: 4px;
+    padding: 24px 32px;
+    margin-bottom: 24px;
+  }
+  .casino-hero-img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 3px;
+    border: 1px solid rgba(201,168,76,0.3);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  }
+  .casino-hero-text h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem;
+    font-weight: 300;
+    color: var(--gold-light);
+    margin-bottom: 6px;
+  }
+  .casino-hero-text .sub {
+    font-size: 0.55rem;
+    letter-spacing: 0.35em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .casino-hero-text p {
+    font-size: 0.65rem;
+    line-height: 1.9;
+    color: var(--text-light);
+    margin-bottom: 14px;
+  }
+  .casino-games {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .casino-game-tag {
+    font-size: 0.55rem;
+    letter-spacing: 0.2em;
+    color: var(--gold-light);
+    background: rgba(201,168,76,0.1);
+    border: 1px solid rgba(201,168,76,0.3);
+    padding: 4px 12px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+
+  .casino-promo-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.5em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+
+  .promo-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+
+  .promo-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(201,168,76,0.15);
+    border-radius: 4px;
+    padding: 18px 20px;
+    position: relative;
+    transition: border-color 0.3s;
+    overflow: hidden;
+  }
+  .promo-card:hover { border-color: rgba(201,168,76,0.4); }
+
+  .promo-img {
+    width: calc(100% + 40px);
+    aspect-ratio: 900 / 600;
+    object-fit: cover;
+    margin: -18px -20px 14px -20px;
+    display: block;
+    border-bottom: 1px solid rgba(201,168,76,0.2);
+  }
+
+  .promo-badge {
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    font-size: 0.45rem;
+    letter-spacing: 0.3em;
+    color: var(--navy);
+    background: var(--gold);
+    padding: 3px 8px;
+    border-radius: 2px;
+    text-transform: uppercase;
+    font-weight: 400;
+  }
+  .promo-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    font-weight: 300;
+    color: var(--gold-light);
+    margin-bottom: 4px;
+    padding-right: 70px;
+  }
+  .promo-name-ja {
+    font-size: 0.58rem;
+    letter-spacing: 0.15em;
+    color: var(--text-light);
+    margin-bottom: 10px;
+  }
+  .promo-desc {
+    font-size: 0.58rem;
+    line-height: 1.8;
+    color: var(--text-light);
+    margin-bottom: 10px;
+  }
+  .promo-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    border-top: 1px solid rgba(201,168,76,0.12);
+    padding-top: 8px;
+  }
+  .promo-meta-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.52rem;
+    letter-spacing: 0.08em;
+  }
+  .promo-meta-label { color: var(--text-light); }
+  .promo-meta-value { color: var(--gold-light); text-align: right; }
+
+  /* ===== AMENITIES SCREEN ===== */
+  #amenities .content-inner {
+    height: 100%;
+    overflow-y: auto;
+    padding: 28px 48px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(201,168,76,0.3) transparent;
+  }
+
+  .ame-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  .ame-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(201,168,76,0.15);
+    border-radius: 4px;
+    padding: 28px 24px;
+    text-align: center;
+    transition: border-color 0.3s, background 0.3s;
+  }
+  .ame-card:hover {
+    border-color: rgba(201,168,76,0.4);
+    background: rgba(201,168,76,0.05);
+  }
+
+  .ame-icon {
+    font-size: 2.2rem;
+    margin-bottom: 14px;
+  }
+  .ame-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-weight: 300;
+    margin-bottom: 4px;
+  }
+  .ame-name-ja {
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .ame-desc {
+    font-size: 0.6rem;
+    font-weight: 300;
+    line-height: 1.9;
+    color: var(--text-light);
+    margin-bottom: 16px;
+  }
+  .ame-detail {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .ame-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.55rem;
+    letter-spacing: 0.1em;
+    border-top: 1px solid rgba(201,168,76,0.1);
+    padding-top: 6px;
+  }
+  .ame-row-label { color: var(--text-light); }
+  .ame-row-value { color: var(--gold-light); }
+
+  /* ===== GOLD DIVIDER ===== */
+  .gold-line {
+    width: 40px;
+    height: 1px;
+    background: var(--gold);
+    margin: 10px 0 20px;
+  }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    padding: 10px 48px;
+    border-top: 1px solid rgba(201,168,76,0.12);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+    background: rgba(10,22,40,0.8);
+  }
+  .footer-text {
+    font-size: 0.5rem;
+    letter-spacing: 0.3em;
+    color: rgba(255,255,255,0.3);
+    text-transform: uppercase;
+  }
+  .footer-contact {
+    font-size: 0.55rem;
+    letter-spacing: 0.15em;
+    color: var(--gold);
+  }
+
+  /* ===== SCROLLBAR ===== */
+  ::-webkit-scrollbar { width: 3px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(201,168,76,0.3); border-radius: 2px; }
+
+  /* QR CODE */
+  .qr-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    padding: 8px;
+    background: white;
+    border-radius: 4px;
+    gap: 4px;
+  }
+  .qr-wrap canvas, .qr-wrap img { display: block; }
+  .qr-label {
+    font-size: 0.45rem;
+    letter-spacing: 0.15em;
+    color: #333;
+    text-align: center;
+    font-family: 'Times New Roman', serif;
+  }
+
+  /* MENU BUTTON */
+  .menu-btn {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 7px 18px;
+    font-size: 0.55rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    background: rgba(201,168,76,0.1);
+    border: 1px solid var(--gold);
+    border-radius: 2px;
+    text-decoration: none;
+    font-family: 'Times New Roman', Times, serif;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+  .menu-btn:hover {
+    background: var(--gold);
+    color: var(--navy);
+  }
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+
+<!-- ===== SHARED HEADER ===== -->
+<div class="header">
+  <div class="logo">
+    Grand La Vogue
+    <span>Hotel &amp; Casino &middot; Sihanoukville</span>
+  </div>
+  <div style="text-align:right">
+    <div class="clock" id="clock">--:--</div>
+    <div class="date-display" id="date-display">---</div>
+  </div>
+</div>
+
+<!-- ===== NAV ===== -->
+<div class="nav">
+  <button class="nav-btn active" data-screen="home">ホーム</button>
+  <button class="nav-btn" data-screen="rooms">客室案内</button>
+  <button class="nav-btn" data-screen="restaurant">レストラン</button>
+  <button class="nav-btn" data-screen="amenities">館内施設</button>
+  <button class="nav-btn" data-screen="casino">カジノ</button>
+</div>
+
+<!-- ===== PROGRESS BAR ===== -->
+<div class="progress-bar-wrap">
+  <div class="progress-bar" id="progressBar"></div>
+</div>
+
+<div class="content">
+
+  <!-- HOME -->
+  <div class="screen active" id="home">
+    <video class="home-video" src="250717GLV紹介用.mp4" autoplay muted loop playsinline></video>
+    <div class="home-bg"></div>
+    <div class="home-deco">
+      <img class="home-logo-img" src="ヤシ金透明.png" alt="Grand La Vogue Logo">
+    </div>
+    <div class="home-text">
+      <div class="welcome-label">Welcome to</div>
+      <h1 class="welcome-title">
+        Grand La Vogue<br>
+        <em>Hotel &amp; Casino</em>
+      </h1>
+      <p class="welcome-sub">
+        シハヌークビルの新しいランドマーク。<br>
+        非日常を思わせる最もユニークなホテル＆カジノで<br>
+        最高のひとときをお楽しみください。
+      </p>
+      <div class="quick-info">
+        <div class="quick-card">
+          <div class="quick-card-label">チェックイン</div>
+          <div class="quick-card-value">14:00</div>
+        </div>
+        <div class="quick-card">
+          <div class="quick-card-label">チェックアウト</div>
+          <div class="quick-card-value">12:00</div>
+        </div>
+        <div class="quick-card">
+          <div class="quick-card-label">フロント</div>
+          <div class="quick-card-value" style="font-size:0.85rem">+(855) 764 286 986</div>
+        </div>
+        <div class="quick-card">
+          <div class="quick-card-label">SNS</div>
+          <div class="quick-card-value" style="font-size:0.75rem">@grandlavoguehotel</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROOMS -->
+  <div class="screen" id="rooms">
+    <div class="content-inner">
+      <div class="section-title">Room Guide</div>
+      <h2 class="section-heading">客室案内</h2>
+      <div class="gold-line"></div>
+      <div class="room-grid">
+
+        <div class="room-card">
+          <div class="room-type">Standard Room &middot; 9F&ndash;14F</div>
+          <div class="room-name">Superior Twin</div>
+          <div class="room-name-ja">スーペリア ツイン</div>
+          <div class="room-details">
+            <span class="room-tag">約36㎡</span>
+            <span class="room-tag">シングルベッド×2</span>
+            <span class="room-tag">シティビュー</span>
+          </div>
+        </div>
+
+        <div class="room-card">
+          <div class="room-type">Standard Room &middot; 9F&ndash;14F</div>
+          <div class="room-name">Superior Double</div>
+          <div class="room-name-ja">スーペリア ダブル</div>
+          <div class="room-details">
+            <span class="room-tag">約38㎡</span>
+            <span class="room-tag">ダブルベッド</span>
+            <span class="room-tag">オーシャンビュー</span>
+          </div>
+        </div>
+
+        <div class="room-card">
+          <div class="room-type">Standard Room &middot; 9F&ndash;14F</div>
+          <div class="room-name">Deluxe</div>
+          <div class="room-name-ja">デラックス</div>
+          <div class="room-details">
+            <span class="room-tag">約37㎡</span>
+            <span class="room-tag">ダブルベッド</span>
+            <span class="room-tag">オーシャンビュー</span>
+          </div>
+        </div>
+
+        <div class="room-card">
+          <div class="room-type">Standard Room &middot; 9F&ndash;14F</div>
+          <div class="room-name">Suite</div>
+          <div class="room-name-ja">スイート</div>
+          <div class="room-details">
+            <span class="room-tag">約61㎡</span>
+            <span class="room-tag">ダブルベッド</span>
+            <span class="room-tag">シティビュー</span>
+            <span class="room-tag">リビング付き</span>
+          </div>
+        </div>
+
+        <div class="room-card">
+          <div class="room-type">Loft &middot; 15F&ndash;16F</div>
+          <div class="room-name">Loft Ocean View</div>
+          <div class="room-name-ja">ロフト オーシャンビュー</div>
+          <div class="room-details">
+            <span class="room-tag">約62㎡</span>
+            <span class="room-tag">ダブルベッド</span>
+            <span class="room-tag">メゾネット</span>
+          </div>
+        </div>
+
+        <div class="room-card">
+          <div class="room-type">Loft &middot; 15F&ndash;16F</div>
+          <div class="room-name">Loft Premium</div>
+          <div class="room-name-ja">ロフト プレミアム</div>
+          <div class="room-details">
+            <span class="room-tag">約99㎡</span>
+            <span class="room-tag">ダブルベッド</span>
+            <span class="room-tag">角部屋</span>
+          </div>
+        </div>
+
+        <div class="room-card">
+          <div class="room-type">Penthouse &middot; 17F&ndash;18F</div>
+          <div class="room-name">Penthouse City View</div>
+          <div class="room-name-ja">ペントハウス シティビュー</div>
+          <div class="room-details">
+            <span class="room-tag">約226㎡</span>
+            <span class="room-tag">キッチン付き</span>
+            <span class="room-tag">ジャグジー</span>
+          </div>
+        </div>
+
+        <div class="room-card" style="grid-column: span 2">
+          <div class="room-type">Penthouse &middot; 17F&ndash;18F</div>
+          <div class="room-name">Penthouse Ocean View</div>
+          <div class="room-name-ja">ペントハウス オーシャンビュー</div>
+          <div class="room-details">
+            <span class="room-tag">約289㎡</span>
+            <span class="room-tag">キッチン付き</span>
+            <span class="room-tag">プライベートテラス</span>
+            <span class="room-tag">ジャグジー</span>
+            <span class="room-tag">ダイニング・リビング付き</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- RESTAURANT -->
+  <div class="screen" id="restaurant">
+    <div class="content-inner">
+      <div class="section-title">Dining &amp; Bar</div>
+      <h2 class="section-heading">レストラン・バー</h2>
+      <div class="gold-line"></div>
+      <div class="rest-grid">
+
+        <div class="rest-card">
+          <div class="rest-floor-badge">
+            <span class="rest-floor-num">7F</span>
+            <span class="rest-floor-label">Floor</span>
+          </div>
+          <div class="rest-info">
+            <div class="rest-name">Vogue Oasis</div>
+            <div class="rest-name-ja">オールデイダイニング</div>
+            <div class="rest-desc">洋食からアジア各国の多彩なメニューが揃うオールデイダイニング。シハヌークビルの海と街を望む開放的な空間。</div>
+            <div class="rest-hours"><div class="rest-hours-dot"></div>24時間営業</div>
+            <div class="rest-tel"><div class="rest-hours-dot" style="background:rgba(255,255,255,0.3)"></div>+(855) 76 428 6986</div>
+            <a class="menu-btn" href="https://makkyirenesan84.github.io/oasis-food-menu/" target="_blank" rel="noopener">メニューを見る &rarr;</a>
+          </div>
+          <div class="qr-wrap">
+            <div id="qrcode-oasis"></div>
+            <div class="qr-label">メニューを見る</div>
+          </div>
+        </div>
+
+        <div class="rest-card">
+          <div class="rest-floor-badge">
+            <span class="rest-floor-num">8F</span>
+            <span class="rest-floor-label">Floor</span>
+          </div>
+          <div class="rest-info">
+            <div class="rest-name">Teppanyaki Omakase 松波</div>
+            <div class="rest-name-ja">鉄板焼 おまかせ</div>
+            <div class="rest-desc">東京・浅草1978年創業の老舗高級ステーキハウス。神戸牛・厳選黒毛和牛を完全個室でご提供。</div>
+            <div class="rest-hours"><div class="rest-hours-dot"></div>5:00 PM &ndash; 10:00 PM（要予約）</div>
+            <div class="rest-tel"><div class="rest-hours-dot" style="background:rgba(255,255,255,0.3)"></div>+(855) 96 258 1129</div>
+          </div>
+        </div>
+
+        <div class="rest-card">
+          <div class="rest-floor-badge">
+            <span class="rest-floor-num">2F</span>
+            <span class="rest-floor-label">Floor</span>
+          </div>
+          <div class="rest-info">
+            <div class="rest-name">Bar Baron</div>
+            <div class="rest-name-ja">バーバロン</div>
+            <div class="rest-desc">東京の名バーがシアヌークビルに。日本人バーテンダーによる極上カクテルと厳選ウィスキー。シガーもどうぞ。</div>
+            <div class="rest-hours"><div class="rest-hours-dot"></div>5:00 PM &ndash; 1:00 AM（月曜定休）</div>
+            <div class="rest-tel"><div class="rest-hours-dot" style="background:rgba(255,255,255,0.3)"></div>+(855) 87 573 437</div>
+          </div>
+        </div>
+
+        <div class="rest-card">
+          <div class="rest-floor-badge">
+            <span class="rest-floor-num">19F</span>
+            <span class="rest-floor-label">Floor</span>
+          </div>
+          <div class="rest-info">
+            <div class="rest-name">Churrasco &amp; Steak Alegria</div>
+            <div class="rest-name-ja">ブラジリアンバーベキュー</div>
+            <div class="rest-desc">ブラジルスタイルBBQ食べ放題。目の前で切り分けてサーブするシュラスコを贅沢にご堪能ください。</div>
+            <div class="rest-hours"><div class="rest-hours-dot"></div>6:00 PM &ndash; 2:00 AM (L.O 12:30)</div>
+            <div class="rest-tel"><div class="rest-hours-dot" style="background:rgba(255,255,255,0.3)"></div>+(855) 88 373 1882</div>
+          </div>
+        </div>
+
+        <div class="rest-card">
+          <div class="rest-floor-badge">
+            <span class="rest-floor-num">19F</span>
+            <span class="rest-floor-label">Floor</span>
+          </div>
+          <div class="rest-info">
+            <div class="rest-name">Sky Town Bar</div>
+            <div class="rest-name-ja">スカイタウンバー</div>
+            <div class="rest-desc">夕日から夜景へ。極上の一杯とライブDJサウンドに包まれながら夜空とともに移ろう贅沢な時間を。</div>
+            <div class="rest-hours"><div class="rest-hours-dot"></div>6:00 PM &ndash; 2:00 AM / Live DJ 7PM&ndash;11PM</div>
+            <div class="rest-tel"><div class="rest-hours-dot" style="background:rgba(255,255,255,0.3)"></div>+(855) 967 011 783</div>
+          </div>
+        </div>
+
+        <div class="rest-card">
+          <div class="rest-floor-badge">
+            <span class="rest-floor-num" style="font-size:1rem">ALL</span>
+            <span class="rest-floor-label">Rooms</span>
+          </div>
+          <div class="rest-info">
+            <div class="rest-name">In-Room Dining</div>
+            <div class="rest-name-ja">インルームダイニング</div>
+            <div class="rest-desc">お部屋でゆっくり贅沢なお食事を。夜景を眺めながらのロマンチックなディナーに。</div>
+            <div class="rest-hours"><div class="rest-hours-dot"></div>24時間対応</div>
+            <div class="rest-tel"><div class="rest-hours-dot" style="background:rgba(255,255,255,0.3)"></div>+(855) 764 286 986</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- CASINO -->
+  <div class="screen" id="casino">
+    <div class="content-inner">
+      <div class="section-title">Casino</div>
+      <h2 class="section-heading">カジノ</h2>
+      <div class="gold-line"></div>
+
+      <div class="casino-hero">
+        <img class="casino-hero-img" src="_DSC4711.JPG" alt="Grand La Vogue Casino">
+        <div class="casino-hero-text">
+          <div class="sub">Grand La Vogue Casino</div>
+          <h3>ラグジュアリーなカジノフロア</h3>
+          <p>
+            アジア屈指のカジノシティ・シアヌークビルに、洗練された落ち着きのある空間が広がります。
+            最新鋭のマシンと多彩なテーブルゲーム、そしてVIP専用エリアで、忘れられないゲーミング体験をどうぞ。
+          </p>
+          <div class="casino-games">
+            <span class="casino-game-tag">Baccarat</span>
+            <span class="casino-game-tag">Niu Niu</span>
+            <span class="casino-game-tag">Dragon Link</span>
+            <span class="casino-game-tag">5 Dragon</span>
+            <span class="casino-game-tag">Slots</span>
+            <span class="casino-game-tag">VIP Room</span>
+          </div>
+        </div>
+        <div class="casino-hero-text">
+          <div class="sub">Information</div>
+          <div class="promo-meta">
+            <div class="promo-meta-row">
+              <span class="promo-meta-label">営業時間</span>
+              <span class="promo-meta-value">24時間営業</span>
+            </div>
+            <div class="promo-meta-row">
+              <span class="promo-meta-label">フロア</span>
+              <span class="promo-meta-value">1F &middot; 2F</span>
+            </div>
+            <div class="promo-meta-row">
+              <span class="promo-meta-label">テーブルゲーム</span>
+              <span class="promo-meta-value">バカラ / 牛牛 他</span>
+            </div>
+            <div class="promo-meta-row">
+              <span class="promo-meta-label">マシン</span>
+              <span class="promo-meta-value">Dragon Link &middot; 5 Dragon</span>
+            </div>
+            <div class="promo-meta-row">
+              <span class="promo-meta-label">お問い合わせ</span>
+              <span class="promo-meta-value">+(855) 764 286 986</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="casino-promo-title">&mdash; Casino Promotions &mdash;</div>
+
+      <div class="promo-grid">
+
+        <div class="promo-card">
+          <img class="promo-img" src="photo_2026-02-03_18-13-23.jpg" alt="Red Coin Daily">
+          <div class="promo-badge">Slot</div>
+          <div class="promo-name">Red Coin Daily</div>
+          <div class="promo-name-ja">スロット レッドコイン デイリープロモーション</div>
+          <div class="promo-desc">
+            指定スロットのフリーゲーム獲得時、ベット額に応じてレッドコインを進呈。毎朝7時にリセット、1日1回限定の会員様限定プロモーション。
+          </div>
+          <div class="promo-meta">
+            <div class="promo-meta-row">
+              <span class="promo-meta-label">$1 &ndash; $3 ベット</span>
+              <span class="promo-meta-value">レッドコイン $33</span>
+            </div>
+            <div class="promo-meta-row">
+              <span class="promo-meta-label">$3.01 &ndash; $5 ベット</span>
+              <span class="promo-meta-value">レッドコイン $55</span>
+            </div>
+            <div class="promo-meta-row">
+              <span class="promo-meta-label">$5.01 以上</span>
+              <span class="promo-meta-value">レッドコイン $88</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="promo-card">
+          <img class="promo-img" src="WEB用 (900 x 600 px).png" alt="Lucky Pick">
+          <div class="promo-badge">Baccarat</div>
+          <div class="promo-name">Lucky Pick</div>
+          <div class="promo-name-ja">毎日当たる！カジノラッキーピック</div>
+          <div class="promo-desc">
+            バカラ・牛牛で特定条件を達成するとマッチプレイチップを進呈。現金チップ・NNチップ・PCチップと組み合わせてご利用いただけます。
+          </div>
+          <div class="promo-meta">
+            <div class="promo-meta-row">
+              <span class="promo-meta-label">バカラ</span>
+              <span class="promo-meta-value">スート一致のナチュラル9</span>
+            </div>
+            <div class="promo-meta-row">
+              <span class="promo-meta-label">バカラ</span>
+              <span class="promo-meta-value">$10以上のタイ・ペア勝利</span>
+            </div>
+            <div class="promo-meta-row">
+              <span class="promo-meta-label">牛牛</span>
+              <span class="promo-meta-value">絵札3枚以上での勝利</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="promo-card">
+          <img class="promo-img" src="3.ルームバイイン.png" alt="Play & Stay">
+          <div class="promo-badge">Stay</div>
+          <div class="promo-name">Play &amp; Stay</div>
+          <div class="promo-name-ja">プレイ＆ステイプロモーション</div>
+          <div class="promo-desc">
+            バカラ・牛牛のバイイン額またはローリング額に応じて、ホテルの客室を無料でご利用いただけます。カジノとホテルを一度にお楽しみいただける特別プロモーション。
+          </div>
+          <div class="promo-meta">
+            <div class="promo-meta-row">
+              <span class="promo-meta-label">対象ゲーム</span>
+              <span class="promo-meta-value">バカラ / 牛牛</span>
+            </div>
+            <div class="promo-meta-row">
+              <span class="promo-meta-label">リワード</span>
+              <span class="promo-meta-value">客室1泊（タイプ選択可）</span>
+            </div>
+            <div class="promo-meta-row">
+              <span class="promo-meta-label">必要なもの</span>
+              <span class="promo-meta-value">有効な身分証明書</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="promo-card">
+          <img class="promo-img" src="1.バカラ.png" alt="Baccarat Rolling">
+          <div class="promo-badge">VIP</div>
+          <div class="promo-name">Baccarat Rolling</div>
+          <div class="promo-name-ja">バカラローリングプロモーション</div>
+          <div class="promo-desc">
+            バカラ専用のローリングチップ（NNチップ）を使用するVIP向けプロモーション。ローリング額が指定額を超えるとコミッション率がアップ。
+          </div>
+          <div class="promo-meta">
+            <div class="promo-meta-row">
+              <span class="promo-meta-label">最低バイイン</span>
+              <span class="promo-meta-value">$500 USD</span>
+            </div>
+            <div class="promo-meta-row">
+              <span class="promo-meta-label">使用チップ</span>
+              <span class="promo-meta-value">NNチップ（ローリング）</span>
+            </div>
+            <div class="promo-meta-row">
+              <span class="promo-meta-label">カード有効期限</span>
+              <span class="promo-meta-value">6ヶ月</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- AMENITIES -->
+  <div class="screen" id="amenities">
+    <div class="content-inner">
+      <div class="section-title">Facilities</div>
+      <h2 class="section-heading">館内施設</h2>
+      <div class="gold-line"></div>
+      <div class="ame-grid">
+
+        <div class="ame-card">
+          <div class="ame-icon">🧖</div>
+          <div class="ame-name">Sauna</div>
+          <div class="ame-name-ja">サウナ</div>
+          <div class="ame-desc">ドライサウナとスチームサウナで心身ともにリフレッシュ。至福の「ディープ・リラックス」をご体験ください。</div>
+          <div class="ame-detail">
+            <div class="ame-row">
+              <span class="ame-row-label">営業時間</span>
+              <span class="ame-row-value">8:00 AM &ndash; 9:00 PM</span>
+            </div>
+            <div class="ame-row">
+              <span class="ame-row-label">場所</span>
+              <span class="ame-row-value">7F</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="ame-card">
+          <div class="ame-icon">🏊</div>
+          <div class="ame-name">Pool</div>
+          <div class="ame-name-ja">プール</div>
+          <div class="ame-desc">開放感あふれるプールで自由にエクササイズ、またはゆったりくつろぐ。お子様も安心の浅いプールもご用意。</div>
+          <div class="ame-detail">
+            <div class="ame-row">
+              <span class="ame-row-label">営業時間</span>
+              <span class="ame-row-value">8:00 AM &ndash; 9:00 PM</span>
+            </div>
+            <div class="ame-row">
+              <span class="ame-row-label">場所</span>
+              <span class="ame-row-value">7F</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="ame-card">
+          <div class="ame-icon">💪</div>
+          <div class="ame-name">Vogue Fitness Club</div>
+          <div class="ame-name-ja">ジム</div>
+          <div class="ame-desc">シアヌークビルの景色を一望するガラス張りの開放的なジム。宿泊客はもちろん一般のお客様もご利用いただけます。</div>
+          <div class="ame-detail">
+            <div class="ame-row">
+              <span class="ame-row-label">営業時間</span>
+              <span class="ame-row-value">8:00 AM &ndash; 10:00 PM</span>
+            </div>
+            <div class="ame-row">
+              <span class="ame-row-label">場所</span>
+              <span class="ame-row-value">8F</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="ame-card">
+          <div class="ame-icon">🎰</div>
+          <div class="ame-name">Casino</div>
+          <div class="ame-name-ja">カジノ</div>
+          <div class="ame-desc">洗練された落ち着きのある空間で、ラグジュアリーな雰囲気のなか特別なカジノ体験をお楽しみいただけます。</div>
+          <div class="ame-detail">
+            <div class="ame-row">
+              <span class="ame-row-label">テーブルゲーム</span>
+              <span class="ame-row-value">バカラ・他</span>
+            </div>
+            <div class="ame-row">
+              <span class="ame-row-label">スロット</span>
+              <span class="ame-row-value">各種あり</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="ame-card" style="grid-column: span 2">
+          <div class="ame-icon">🌊</div>
+          <div class="ame-name">Sky Town</div>
+          <div class="ame-name-ja">スカイタウン / 19F</div>
+          <div class="ame-desc">19階に広がる空中エンターテインメント空間。ブラジリアンBBQ「Alegria」とライブDJバー「Sky Town Bar」が揃う、シアヌークビル最高峰の夜をお届けします。夕日と夜景を望む最高のロケーションでお楽しみください。</div>
+          <div class="ame-detail">
+            <div class="ame-row">
+              <span class="ame-row-label">営業時間</span>
+              <span class="ame-row-value">6:00 PM &ndash; 2:00 AM</span>
+            </div>
+            <div class="ame-row">
+              <span class="ame-row-label">Live DJ</span>
+              <span class="ame-row-value">7:00 PM &ndash; 11:00 PM</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div><!-- /.content -->
+
+<!-- ===== FOOTER ===== -->
+<div class="footer">
+  <div class="footer-text">Grand La Vogue Hotel &amp; Casino &middot; Sihanoukville, Cambodia</div>
+  <div class="footer-contact">フロント: +(855) 764 286 986 &middot; Telegram: @Grandlavoguereception</div>
+</div>
+
+<script>
+  // ===== Clock =====
+  function updateClock() {
+    const now = new Date();
+    const h = String(now.getHours()).padStart(2,'0');
+    const m = String(now.getMinutes()).padStart(2,'0');
+    document.getElementById('clock').textContent = h + ':' + m;
+    const days = ['日','月','火','水','木','金','土'];
+    document.getElementById('date-display').textContent =
+      now.getFullYear() + '年' + (now.getMonth()+1) + '月' + now.getDate() + '日（' + days[now.getDay()] + '）';
+  }
+  updateClock();
+  setInterval(updateClock, 10000);
+
+  // ===== QR code (Vogue Oasis menu) =====
+  // メニューURLを変更したい場合は下の文字列を差し替えてください
+  new QRCode(document.getElementById('qrcode-oasis'), {
+    text: 'https://makkyirenesan84.github.io/oasis-food-menu/',
+    width: 72,
+    height: 72,
+    colorDark: '#000000',
+    colorLight: '#ffffff',
+    correctLevel: QRCode.CorrectLevel.M
+  });
+
+  // ===== Screen switcher & auto slide =====
+  const screens = ['home','rooms','restaurant','amenities','casino'];
+  const navButtons = document.querySelectorAll('.nav-btn');
+  let current = 0;
+  let autoTimer = null;
+
+  function startProgressBar() {
+    const bar = document.getElementById('progressBar');
+    bar.classList.remove('animating');
+    bar.style.width = '0%';
+    void bar.offsetWidth; // force reflow
+    bar.classList.add('animating');
+  }
+
+  function goToScreen(index) {
+    current = index;
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    navButtons.forEach(b => b.classList.remove('active'));
+    document.getElementById(screens[current]).classList.add('active');
+    navButtons[current].classList.add('active');
+    startProgressBar();
+  }
+
+  function startAuto() {
+    clearInterval(autoTimer);
+    autoTimer = setInterval(() => {
+      goToScreen((current + 1) % screens.length);
+    }, 15000);
+  }
+
+  navButtons.forEach((btn, i) => {
+    btn.addEventListener('click', () => {
+      goToScreen(i);
+      startAuto();
+    });
+  });
+
+  startAuto();
+  startProgressBar();
+</script>
+
+</body>
+</html>
