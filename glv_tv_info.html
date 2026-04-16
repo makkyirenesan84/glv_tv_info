@@ -745,16 +745,12 @@
 <!-- ===== NAV ===== -->
 <div class="nav">
   <button class="nav-btn active" data-screen="home">ホーム</button>
+  <button class="nav-btn" data-screen="casino">カジノ</button>
   <button class="nav-btn" data-screen="rooms">客室案内</button>
   <button class="nav-btn" data-screen="restaurant">レストラン</button>
   <button class="nav-btn" data-screen="amenities">館内施設</button>
-  <button class="nav-btn" data-screen="casino">カジノ</button>
 </div>
 
-<!-- ===== PROGRESS BAR ===== -->
-<div class="progress-bar-wrap">
-  <div class="progress-bar" id="progressBar"></div>
-</div>
 
 <div class="content">
 
@@ -806,8 +802,7 @@
       <div class="room-grid">
 
         <div class="room-card">
-          <div class="room-type">Standard Room</div>
-          <div class="room-floor">9F&ndash;14F</div>
+          <div class="room-type">Standard Room &middot; 9F&ndash;14F</div>
           <div class="room-name">Superior Twin</div>
           <div class="room-name-ja">スーペリア ツイン</div>
           <div class="room-details">
@@ -818,8 +813,7 @@
         </div>
 
         <div class="room-card">
-          <div class="room-type">Standard Room</div>
-          <div class="room-floor">9F&ndash;14F</div>
+          <div class="room-type">Standard Room &middot; 9F&ndash;14F</div>
           <div class="room-name">Superior Double</div>
           <div class="room-name-ja">スーペリア ダブル</div>
           <div class="room-details">
@@ -830,8 +824,7 @@
         </div>
 
         <div class="room-card">
-          <div class="room-type">Standard Room</div>
-          <div class="room-floor">9F&ndash;14F</div>
+          <div class="room-type">Standard Room &middot; 9F&ndash;14F</div>
           <div class="room-name">Deluxe</div>
           <div class="room-name-ja">デラックス</div>
           <div class="room-details">
@@ -842,8 +835,7 @@
         </div>
 
         <div class="room-card">
-          <div class="room-type">Standard Room</div>
-          <div class="room-floor">9F&ndash;14F</div>
+          <div class="room-type">Standard Room &middot; 9F&ndash;14F</div>
           <div class="room-name">Suite</div>
           <div class="room-name-ja">スイート</div>
           <div class="room-details">
@@ -855,8 +847,7 @@
         </div>
 
         <div class="room-card">
-          <div class="room-type">Loft</div>
-          <div class="room-floor">15F&ndash;16F</div>
+          <div class="room-type">Loft &middot; 15F&ndash;16F</div>
           <div class="room-name">Loft Ocean View</div>
           <div class="room-name-ja">ロフト オーシャンビュー</div>
           <div class="room-details">
@@ -867,8 +858,7 @@
         </div>
 
         <div class="room-card">
-          <div class="room-type">Loft</div>
-          <div class="room-floor">15F&ndash;16F</div>
+          <div class="room-type">Loft &middot; 15F&ndash;16F</div>
           <div class="room-name">Loft Premium</div>
           <div class="room-name-ja">ロフト プレミアム</div>
           <div class="room-details">
@@ -879,8 +869,7 @@
         </div>
 
         <div class="room-card">
-          <div class="room-type">Penthouse</div>
-          <div class="room-floor">17F&ndash;18F</div>
+          <div class="room-type">Penthouse &middot; 17F&ndash;18F</div>
           <div class="room-name">Penthouse City View</div>
           <div class="room-name-ja">ペントハウス シティビュー</div>
           <div class="room-details">
@@ -891,8 +880,7 @@
         </div>
 
         <div class="room-card" style="grid-column: span 2">
-          <div class="room-type">Penthouse</div>
-          <div class="room-floor">17F&ndash;18F</div>
+          <div class="room-type">Penthouse &middot; 17F&ndash;18F</div>
           <div class="room-name">Penthouse Ocean View</div>
           <div class="room-name-ja">ペントハウス オーシャンビュー</div>
           <div class="room-details">
@@ -1295,19 +1283,10 @@
     correctLevel: QRCode.CorrectLevel.M
   });
 
-  // ===== Screen switcher & auto slide =====
-  const screens = ['home','rooms','restaurant','amenities','casino'];
+  // ===== Screen switcher =====
+  const screens = ['home','casino','rooms','restaurant','amenities'];
   const navButtons = document.querySelectorAll('.nav-btn');
   let current = 0;
-  let autoTimer = null;
-
-  function startProgressBar() {
-    const bar = document.getElementById('progressBar');
-    bar.classList.remove('animating');
-    bar.style.width = '0%';
-    void bar.offsetWidth; // force reflow
-    bar.classList.add('animating');
-  }
 
   function goToScreen(index) {
     current = index;
@@ -1315,25 +1294,13 @@
     navButtons.forEach(b => b.classList.remove('active'));
     document.getElementById(screens[current]).classList.add('active');
     navButtons[current].classList.add('active');
-    startProgressBar();
-  }
-
-  function startAuto() {
-    clearInterval(autoTimer);
-    autoTimer = setInterval(() => {
-      goToScreen((current + 1) % screens.length);
-    }, 15000);
   }
 
   navButtons.forEach((btn, i) => {
     btn.addEventListener('click', () => {
       goToScreen(i);
-      startAuto();
     });
   });
-
-  startAuto();
-  startProgressBar();
 </script>
 
 </body>
